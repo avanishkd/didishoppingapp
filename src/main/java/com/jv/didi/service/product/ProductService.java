@@ -1,6 +1,7 @@
 package com.jv.didi.service.product;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -20,10 +21,10 @@ public interface ProductService {
 	Product getProduct(@Min(value = 1L, message = "Invalid product ID.") long id);
 
 	Product save(Product product);
-	
+
 	ProductResponseDTO addProduct(ProductAddDTO productDto);
 
-	Collection<Product> getAllProductsByIds(long[] listId);
+	List<Product> getAllProductsByIds(List<Long> listId);
 
 	ProductResponseDTO updateProduct(ProductResponseDTO productDto);
 }

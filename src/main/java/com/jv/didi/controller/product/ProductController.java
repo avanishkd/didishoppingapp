@@ -1,6 +1,7 @@
 package com.jv.didi.controller.product;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -51,9 +52,9 @@ public class ProductController {
 	}
 
 	@GetMapping("/list/{idArray}")
-	public Collection<Product> getProductsByIds(@PathVariable long[] idArray) {
-		Collection<Product> products = productService.getAllProductsByIds(idArray);
-		if (idArray.length != products.size())
+	public Collection<Product> getProductsByIds(@PathVariable List<Long> idList) {
+		List<Product> products = productService.getAllProductsByIds(idList);
+		if (idList.size() != products.size())
 			logger.warn(
 					"unable to fetch all products, some products with given id might not be avialable, products fetched->{}",
 					products);

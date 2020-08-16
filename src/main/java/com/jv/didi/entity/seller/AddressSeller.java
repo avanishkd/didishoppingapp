@@ -2,13 +2,14 @@ package com.jv.didi.entity.seller;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class SellerAddress {
+public class AddressSeller {
 	@Id
 
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int addrId;
 
 	private String street;
@@ -21,11 +22,11 @@ public class SellerAddress {
 
 	private String pin;
 
-	public SellerAddress() {
+	public AddressSeller() {
 
 	}
 
-	public SellerAddress(int addrId, String street, String city, String state, String country, String pin) {
+	public AddressSeller(int addrId, String street, String city, String state, String country, String pin) {
 		super();
 		this.addrId = addrId;
 		this.street = street;
