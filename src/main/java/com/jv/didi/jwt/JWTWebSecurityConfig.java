@@ -1,5 +1,6 @@
 package com.jv.didi.jwt;
 
+import com.jv.didi.jwt.mobile.OTPAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +37,11 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private String authenticationPath;
 
 	@Autowired
+	private OTPAuthenticationProvider otpAuthenticationProvider;
+
+	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.authenticationProvider(otpAuthenticationProvider);
 		auth.userDetailsService(jwtInMemoryUserDetailsService).passwordEncoder(passwordEncoderBean());
 	}
 
