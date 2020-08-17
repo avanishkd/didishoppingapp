@@ -10,6 +10,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -17,9 +18,11 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.jv.didi.entity.seller.Seller;
 
 @Entity
+@JsonIgnoreProperties({ "seller" })
 public class SellerStock implements Serializable {
 
 	/**
@@ -28,12 +31,12 @@ public class SellerStock implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "STOCK_ID")
-	private long id;
+	private Long id;
 
 	@ElementCollection // @OneToMany for basic and embeddables
-	@CollectionTable(name = "SellerStockItem") // defaults to "Cart_items" if not overridden
+	@CollectionTable(name = "SellerStockItem") // defaults to "Stock_items" if not overridden
 	Collection<SellerStockItem> items;
 
 	@JsonBackReference
@@ -43,47 +46,42 @@ public class SellerStock implements Serializable {
 	private Seller seller;
 
 	public SellerStock() {
-
+		super();
 	}
 
-	public SellerStock(long id) {
-
+	public SellerStock(Long id, Collection<SellerStockItem> items, Seller seller) {
+		super();
 		this.id = id;
+		this.items = items;
+		this.seller = seller;
 	}
 
-	public long getId() {
+	@Transient
+	public BigDecimal getTotalStockAmount() {
+		BigDecimal amount = new BigDecimal("0.0");
+
+		Collection<SellerStockItem> stockItemList = this.getItems();
+		for (SellerStockItem itrStockItem : stockItemList) {
+			amount = amount.add(itrStockItem.getSubTotal());
+		}
+		// TODO Auto-generated method stub
+		return amount;
+	}
+
+	public Long getId() {
 		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Collection<SellerStockItem> getItems() {
 		return items;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public void setItems(Collection<SellerStockItem> items) {
 		this.items = items;
-	}
-
-	@Transient
-	public BigDecimal getTotalCartAmount() {
-		BigDecimal amount = new BigDecimal("0.0");
-
-		Collection<SellerStockItem> cartItemList = this.getItems();
-		for (SellerStockItem itrCartItem : cartItemList) {
-			amount = amount.add(itrCartItem.getSubTotal());
-		}
-		// TODO Auto-generated method stub
-		return amount;
-	}
-
-	public SellerStock(long id, Collection<SellerStockItem> items, Seller seller) {
-		super();
-		this.id = id;
-		this.items = items;
-		this.seller = seller;
 	}
 
 	public Seller getSeller() {
@@ -92,10 +90,6 @@ public class SellerStock implements Serializable {
 
 	public void setSeller(Seller seller) {
 		this.seller = seller;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 }

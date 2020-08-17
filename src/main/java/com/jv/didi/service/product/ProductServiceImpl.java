@@ -47,9 +47,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional
-	public List<Product> getAllProductsByIds(long[] idArray) {
-
-		List<Long> listId = Arrays.stream(idArray).boxed().collect(Collectors.toList());
+	public List<Product> getAllProductsByIds(List<Long> listId) {
 
 		productRepository.findAllById(listId);
 		List<Product> products = (List<Product>) productRepository.findAllById(listId);
